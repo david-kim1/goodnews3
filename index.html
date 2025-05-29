@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>인슐린 저항성 상세 자가 체크 (BMI 및 가중치 적용)</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .survey-container { max-width: 800px; margin: 2rem auto; background-color: #fff; padding: 2rem; border-radius: 0.5rem; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        .survey-header { text-align: center; margin-bottom: 2rem; }
+        .survey-title { font-size: 2rem; font-weight: 700; color: #1d4ed8; }
+        .survey-description { font-size: 1rem; color: #4b5563; margin-top: 0.5rem; }
+        .section-title { font-size: 1.5rem; font-weight: 600; color: #1e40af; margin-top: 2rem; margin-bottom: 1rem; border-bottom: 2px solid #93c5fd; padding-bottom: 0.5rem; }
+        .question-group { margin-bottom: 1.5rem; }
+        .question-item { display: flex; align-items: center; margin-bottom: 0.75rem; padding: 0.5rem; border-radius: 0.375rem; transition: background-color 0.2s; }
+        .question-item:hover { background-color: #eff6ff; }
+        .question-item input[type="checkbox"], .question-item input[type="radio"] { width: 1.1rem; height: 1.1rem; margin-right: 0.5rem; accent-color: #2563eb; }
+        .question-item label, .radio-label { font-size: 1rem; color: #374151; flex-grow: 1; margin-left: 0.25rem; }
+        .input-field, .select-field { width: 100%; padding: 0.75rem; border: 1px solid #d1d5db; border-radius: 0.375rem; margin-top: 0.25rem; box-sizing: border-box; }
+        .disclaimer { margin-top: 2.5rem; padding: 1rem; background-color: #fffbeb; border-left: 4px solid #facc15; color: #713f12; font-size: 0.9rem; }
+        .result-button { display: block; width: 100%; padding: 0.75rem; background-color: #2563eb; color: white; font-size: 1.1rem; font-weight: 600; border: none; border-radius: 0.375rem; cursor: pointer; transition: background-color 0.2s; margin-top: 2rem; }
+        .result-button:hover { background-color: #1d4ed8; }
+        .result-display { margin-top: 2rem; padding: 1.5rem; background-color: #f3f4f6; border-radius: 0.5rem; }
+        .result-display h3 { font-size: 1.25rem; font-weight: 600; color: #111827; margin-bottom: 1rem; text-align: center; }
+        .result-item { margin-bottom: 0.5rem; font-size: 1rem; }
+        .result-item strong { color: #1e3a8a; /* Tailwind blue-900 */ }
+        .risk-level { font-size: 1.2rem; font-weight: bold; padding: 0.5rem; border-radius: 0.25rem; text-align: center; margin-top:1rem;}
+        .risk-low { background-color: #d1fae5; color: #065f46; } /* Tailwind green */
+        .risk-moderate { background-color: #fef3c7; color: #92400e; } /* Tailwind amber */
+        .risk-high { background-color: #fee2e2; color: #991b1b; } /* Tailwind red */
+    </style>
+</head>
+<body class="bg-gray-100">
+
+    <div class="survey-container">
+        <header class="survey-header">
+            <h1 class="survey-title">인슐린 저항성 상세 자가 체크</h1>
+            <p class="survey-description">본 설문은 참고용이며, 의학적 진단을 대체할 수 없습니다.<br>결과 해석 시 반드시 주의사항을 숙지해 주십시오.</p>
+        </header>
+
+        <form id="insulinResistanceFormAdv">
+            <section>
+                <h2 class="section-title">I. 기본 정보</h2>
+                <div class="question-group grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4">
+                    <div>
+                        <label for="name" class="block text-sm font-medium text-gray-700">성함 (선택):</label>
+                        <input type="text" id="name" name="name" class="input-field">
+                    </div>
+                    <div>
+                        <label for="age" class="block text-sm font-medium text-gray-700">나이 (만):<span class="text-red-500">*</span></label>
+                        <input type="number" id="age" name="age" class="input-field" required>
+                    </div>
+                    <div>
+                        <label for="height" class="block text-sm font-medium text-gray-700">키 (cm):<span class="text-red-500">*</span></label>
+                        <input type="number" id="height" name="height" class="input-field" required>
+                    </div>
+                    <div>
+                        <label for="weight" class="block text-sm font-medium text-gray-700">체중 (kg):<span class="text-red-500">*</span></label>
+                        <input type="number" id="weight" name="weight" class="input-field" required>
+                    </div>
+                    <div class="md:col-span-2">
+                        <label class="block text-sm font-medium text-gray-700">성별:<span class="text-red-500">*</span></label>
+                        <div class="mt-2 flex space-x-4">
+                            <div class="question-item !mb-0"><input type="radio" id="gender_male" name="gender" value="male" required><label for="gender_male" class="radio-label">남성</label></div>
+                            <div class="question-item !mb-0"><input type="radio" id="gender_female" name="gender" value="female"><label for="gender_female" class="radio-label">여성</label></div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section>
+                <h2 class="section-title">II. 위험 요인 체크</h2>
+                <p class="text-sm text-gray-600 mb-4">다음 중 본인에게 해당되는 항목을 모두 선택해 주세요.</p>
+                <div class="question-group">
+                    <div class="question-item"><input type="checkbox" id="rf1" name="risk_factor" value="과체중/복부비만"><label for="rf1">과체중이거나 복부 비만이다 (BMI 또는 허리둘레 기준).</label></div>
+                    <div class="question-item"><input type="checkbox" id="rf2" name="risk_factor" value="가족력_당뇨병"><label for="rf2">가족 중에 당뇨병 환자가 있다 (부모, 형제자매).</label></div>
+                    <div class="question-item"><input type="checkbox" id="rf3" name="risk_factor" value="좌식생활"><label for="rf3">평소 신체 활동량이 매우 적고, 주로 앉아서 생활한다.</label></div>
+                    <div class="question-item"><input type="checkbox" id="rf4" name="risk_factor" value="고혈압"><label for="rf4">고혈압 진단을 받았거나 혈압이 높은 편이다 (수축기 130mmHg 또는 이완기 85mmHg 이상).</label></div>
+                    <div class="question-item"><input type="checkbox" id="rf5" name="risk_factor" value="이상지질혈증"><label for="rf5">이상지질혈증(고지혈증) 진단을 받았거나, 혈중 중성지방 수치가 높거나 HDL 콜레스테롤 수치가 낮다.</label></div>
+                    <div class="question-item"><input type="checkbox" id="rf6" name="risk_factor" value="임신성당뇨병력"><label for="rf6">과거 임신성 당뇨병을 진단받은 적이 있다 (여성).</label></div>
+                    <div class="question-item"><input type="checkbox" id="rf7" name="risk_factor" value="다낭성난소증후군"><label for="rf7">다낭성 난소 증후군 진단을 받은 적이 있다 (여성).</label></div>
+                    <div class="question-item"><input type="checkbox" id="rf8" name="risk_factor" value="수면부족"><label for="rf8">만성적으로 수면이 부족하거나 수면의 질이 좋지 않다.</label></div>
+                    <div class="question-item"><input type="checkbox" id="rf9" name="risk_factor" value="고탄수화물식단"><label for="rf9">흰쌀밥, 빵, 면, 떡, 과자, 단 음료 등 정제 탄수화물 및 당분 섭취가 잦다.</label></div>
+                    <div class="question-item"><input type="checkbox" id="rf10" name="risk_factor" value="흡연"><label for="rf10">현재 흡연 중이다.</label></div>
+                </div>
+            </section>
+
+            <section>
+                <h2 class="section-title">III. 주요 증상 체크</h2>
+                <p class="text-sm text-gray-600 mb-4">최근 경험하고 있는 증상 중 해당되는 항목을 모두 선택해 주세요.</p>
+                <div class="question-group">
+                    <div class="question-item"><input type="checkbox" id="s1" name="symptom" value="식후피로감"><label for="s1">식사 후에 심한 피로감이나 졸음이 몰려온다.</label></div>
+                    <div class="question-item"><input type="checkbox" id="s2" name="symptom" value="단음식갈망"><label for="s2">단 음식이나 탄수화물(빵, 면 등)이 계속 당긴다.</label></div>
+                    <div class="question-item"><input type="checkbox" id="s3" name="symptom" value="체중증가_복부"><label for="s3">특별한 이유 없이 체중이 늘거나, 특히 복부 지방이 늘었다.</label></div>
+                    <div class="question-item"><input type="checkbox" id="s4" name="symptom" value="공복감_잦음"><label for="s4">식사를 해도 금방 허기지고, 자주 배가 고프다.</label></div>
+                    <div class="question-item"><input type="checkbox" id="s5" name="symptom" value="피부문제_흑색극세포증"><label for="s5">목 뒤, 겨드랑이, 사타구니 등 피부가 접히는 부분이 거뭇거뭇하고 두꺼워졌다 (흑색극세포증).</label></div>
+                    <div class="question-item"><input type="checkbox" id="s6" name="symptom" value="집중력저하_기억력감퇴"><label for="s6">집중력이 떨어지고 기억력이 예전 같지 않다 (브레인 포그).</label></div>
+                    <div class="question-item"><input type="checkbox" id="s7" name="symptom" value="잦은갈증_다뇨"><label for="s7">목이 자주 마르고 소변을 자주 본다.</label></div>
+                    <div class="question-item"><input type="checkbox" id="s8" name="symptom" value="손발저림_감각이상"><label for="s8">손이나 발이 저리거나 감각이 둔해지는 느낌이 있다.</label></div>
+                    <div class="question-item"><input type="checkbox" id="s9" name="symptom" value="만성피로_무기력"><label for="s9">충분히 쉬어도 피로가 잘 풀리지 않고 무기력하다.</label></div>
+                    <div class="question-item"><input type="checkbox" id="s10" name="symptom" value="잦은염증_상처회복지연"><label for="s10">피부에 염증이 자주 생기거나 상처가 잘 아물지 않는다.</label></div>
+                </div>
+            </section>
+
+            <button type="submit" id="showResultButtonAdv" class="result-button">결과 분석 및 위험도 보기</button>
+        </form>
+
+        <div id="resultDisplayAdv" class="result-display hidden">
+            <h3>인슐린 저항성 자가 체크 결과</h3>
+            <div id="basicInfoResult" class="result-item"></div>
+            <div id="bmiResult" class="result-item"></div>
+            <div id="riskFactorScoreResult" class="result-item"></div>
+            <div id="symptomScoreResult" class="result-item"></div>
+            <div id="totalScoreResult" class="result-item font-semibold"></div>
+            <div id="riskLevelResult" class="risk-level"></div>
+            <p class="mt-6 text-sm">위험도 평가는 일반적인 참고 자료이며, 개인의 건강 상태에 따라 다를 수 있습니다. 정확한 진단 및 건강 관리는 반드시 의사 또는 의료 전문가와 상담하시기 바랍니다.</p>
+        </div>
+
+        <div class="disclaimer">
+            <strong>⚠️ 중요 안내사항 ⚠️</strong><br>
+            본 설문지는 의학적 진단 도구가 아니며, 교육 및 정보 제공 목적으로만 사용될 수 있습니다. 제시된 항목들은 인슐린 저항성과 관련될 수 있는 일반적인 위험 요인 및 증상이며, 개인의 건강 상태는 매우 다양할 수 있습니다. 이 설문 결과에만 의존하여 스스로 건강 상태를 판단하거나 치료를 결정해서는 안 됩니다. 건강에 대한 우려나 특정 증상이 있다면, 반드시 의사 또는 자격을 갖춘 의료 전문가와 상담하여 정확한 진단과 적절한 조언을 받으시기 바랍니다. 가중치 및 위험도 평가는 일반적인 경향을 단순화한 예시이며, 모든 개인에게 동일하게 적용될 수 없습니다.
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('insulinResistanceFormAdv').addEventListener('submit', function(event) {
+            event.preventDefault(); // 폼 기본 제출 방지
+
+            // 기본 정보 가져오기
+            const age = parseInt(document.getElementById('age').value);
+            const heightCm = parseFloat(document.getElementById('height').value);
+            const weightKg = parseFloat(document.getElementById('weight').value);
+            const gender = document.querySelector('input[name="gender"]:checked')?.value;
+
+            if (isNaN(age) || isNaN(heightCm) || isNaN(weightKg) || !gender) {
+                alert("나이, 키, 체중, 성별을 모두 올바르게 입력해주세요.");
+                return;
+            }
+
+            // BMI 계산
+            const heightM = heightCm / 100;
+            const bmi = weightKg / (heightM * heightM);
+            let bmiCategory = "";
+            if (bmi < 18.5) bmiCategory = "저체중";
+            else if (bmi < 23) bmiCategory = "정상";
+            else if (bmi < 25) bmiCategory = "과체중";
+            else if (bmi < 30) bmiCategory = "경도 비만";
+            else bmiCategory = "중등도 이상 비만";
+
+            let totalScore = 0;
+
+            // 1. BMI에 따른 가중치
+            if (bmi >= 23 && bmi < 25) totalScore += 1; // 과체중
+            else if (bmi >= 25 && bmi < 30) totalScore += 2; // 경도 비만
+            else if (bmi >= 30) totalScore += 3; // 중등도 이상 비만
+
+            // 2. 나이에 따른 가중치
+            if (age >= 40 && age < 50) totalScore += 1;
+            else if (age >= 50) totalScore += 2;
+
+            // 3. 위험 요인 체크 및 가중치
+            let riskFactorBaseScore = 0;
+            const riskFactors = document.querySelectorAll('input[name="risk_factor"]:checked');
+            riskFactors.forEach(rf => {
+                riskFactorBaseScore += 1; // 각 항목당 기본 1점
+                // 특정 위험 요인에 대한 추가 가중치 (예시)
+                if (rf.id === 'rf2') totalScore += 1; // 당뇨병 가족력: 추가 1점
+                if (rf.id === 'rf4' || rf.id === 'rf5') totalScore += 1; // 고혈압 또는 이상지질혈증: 추가 1점
+                if (gender === 'female') {
+                    if (rf.id === 'rf6') totalScore += 1; // 여성 + 임신성 당뇨병력: 추가 1점
+                    if (rf.id === 'rf7') totalScore += 1; // 여성 + 다낭성난소증후군: 추가 1점
+                }
+            });
+            totalScore += riskFactorBaseScore; // 위험요인 기본 점수 합산
+
+            // 4. 주요 증상 체크 및 가중치
+            let symptomBaseScore = 0;
+            const symptoms = document.querySelectorAll('input[name="symptom"]:checked');
+            symptoms.forEach(s => {
+                symptomBaseScore += 1; // 각 항목당 기본 1점
+                 // 특정 증상에 대한 추가 가중치 (예시)
+                if (s.id === 's5') totalScore += 1; // 흑색극세포증: 추가 1점
+            });
+            totalScore += symptomBaseScore; // 증상 기본 점수 합산
+
+            // 위험도 평가 (예시 기준)
+            let riskLevel = "";
+            let riskLevelClass = "";
+            if (totalScore <= 5) {
+                riskLevel = "낮음";
+                riskLevelClass = "risk-low";
+            } else if (totalScore <= 10) {
+                riskLevel = "주의";
+                riskLevelClass = "risk-moderate";
+            } else {
+                riskLevel = "높음";
+                riskLevelClass = "risk-high";
+            }
+
+            // 결과 표시
+            document.getElementById('basicInfoResult').innerHTML = `<strong>나이:</strong> 만 ${age}세, <strong>성별:</strong> ${gender === 'male' ? '남성' : '여성'}`;
+            document.getElementById('bmiResult').innerHTML = `<strong>BMI:</strong> ${bmi.toFixed(2)} (${bmiCategory})`;
+            document.getElementById('riskFactorScoreResult').innerHTML = `<strong>위험 요인 점수(가중치 포함):</strong> ${riskFactorBaseScore + (totalScore - riskFactorBaseScore - symptomBaseScore)} 점 (선택 개수: ${riskFactors.length}개)`;
+            document.getElementById('symptomScoreResult').innerHTML = `<strong>주요 증상 점수(가중치 포함):</strong> ${symptomBaseScore + (totalScore - riskFactorBaseScore - symptomBaseScore - (totalScore - riskFactorBaseScore - symptomBaseScore))} 점 (선택 개수: ${symptoms.length}개)`; // 복잡해서 단순화 필요
+            document.getElementById('totalScoreResult').innerHTML = `<strong>총점 (가중치 적용):</strong> ${totalScore} 점`;
+            
+            const riskLevelElement = document.getElementById('riskLevelResult');
+            riskLevelElement.textContent = `종합 위험도: ${riskLevel}`;
+            riskLevelElement.className = `risk-level ${riskLevelClass}`; // 기존 클래스 초기화 후 새 클래스 적용
+
+            document.getElementById('resultDisplayAdv').classList.remove('hidden');
+            document.getElementById('resultDisplayAdv').scrollIntoView({ behavior: 'smooth' });
+        });
+    </script>
+
+</body>
+</html>
