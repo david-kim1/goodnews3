@@ -3,216 +3,444 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>인슐린 저항성 상세 자가 체크 (BMI 및 가중치 적용)</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <title>인슐린 저항성 자가 테스트 (고급)</title>
     <style>
-        body { font-family: 'Inter', sans-serif; }
-        .survey-container { max-width: 800px; margin: 2rem auto; background-color: #fff; padding: 2rem; border-radius: 0.5rem; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
-        .survey-header { text-align: center; margin-bottom: 2rem; }
-        .survey-title { font-size: 2rem; font-weight: 700; color: #1d4ed8; }
-        .survey-description { font-size: 1rem; color: #4b5563; margin-top: 0.5rem; }
-        .section-title { font-size: 1.5rem; font-weight: 600; color: #1e40af; margin-top: 2rem; margin-bottom: 1rem; border-bottom: 2px solid #93c5fd; padding-bottom: 0.5rem; }
-        .question-group { margin-bottom: 1.5rem; }
-        .question-item { display: flex; align-items: center; margin-bottom: 0.75rem; padding: 0.5rem; border-radius: 0.375rem; transition: background-color 0.2s; }
-        .question-item:hover { background-color: #eff6ff; }
-        .question-item input[type="checkbox"], .question-item input[type="radio"] { width: 1.1rem; height: 1.1rem; margin-right: 0.5rem; accent-color: #2563eb; }
-        .question-item label, .radio-label { font-size: 1rem; color: #374151; flex-grow: 1; margin-left: 0.25rem; }
-        .input-field, .select-field { width: 100%; padding: 0.75rem; border: 1px solid #d1d5db; border-radius: 0.375rem; margin-top: 0.25rem; box-sizing: border-box; }
-        .disclaimer { margin-top: 2.5rem; padding: 1rem; background-color: #fffbeb; border-left: 4px solid #facc15; color: #713f12; font-size: 0.9rem; }
-        .result-button { display: block; width: 100%; padding: 0.75rem; background-color: #2563eb; color: white; font-size: 1.1rem; font-weight: 600; border: none; border-radius: 0.375rem; cursor: pointer; transition: background-color 0.2s; margin-top: 2rem; }
-        .result-button:hover { background-color: #1d4ed8; }
-        .result-display { margin-top: 2rem; padding: 1.5rem; background-color: #f3f4f6; border-radius: 0.5rem; }
-        .result-display h3 { font-size: 1.25rem; font-weight: 600; color: #111827; margin-bottom: 1rem; text-align: center; }
-        .result-item { margin-bottom: 0.5rem; font-size: 1rem; }
-        .result-item strong { color: #1e3a8a; /* Tailwind blue-900 */ }
-        .risk-level { font-size: 1.2rem; font-weight: bold; padding: 0.5rem; border-radius: 0.25rem; text-align: center; margin-top:1rem;}
-        .risk-low { background-color: #d1fae5; color: #065f46; } /* Tailwind green */
-        .risk-moderate { background-color: #fef3c7; color: #92400e; } /* Tailwind amber */
-        .risk-high { background-color: #fee2e2; color: #991b1b; } /* Tailwind red */
+        body {
+            font-family: 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            background-color: #f8f9fa;
+            color: #343a40;
+        }
+        .container {
+            background: #ffffff;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            max-width: 800px;
+            margin: 30px auto;
+        }
+        h1, h2, h3, h4, h5 {
+            color: #2c3e50;
+        }
+        h1 {
+            text-align: center;
+            color: #4CAF50;
+            margin-bottom: 25px;
+        }
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #495057;
+        }
+        input[type="text"], input[type="number"], select {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 18px;
+            border: 1px solid #ced4da;
+            border-radius: 5px;
+            box-sizing: border-box;
+            font-size: 1em;
+        }
+        input[type="checkbox"] {
+            margin-right: 10px;
+            vertical-align: middle;
+        }
+        .checkbox-group label {
+            font-weight: normal;
+            display: inline-block;
+            margin-bottom: 10px;
+            cursor: pointer;
+        }
+        .checkbox-group input[type="checkbox"] {
+            width: auto;
+            margin-bottom: 0;
+        }
+        button { /* 일반 버튼 (결과 분석) */
+            background-color: #4CAF50;
+            color: white;
+            padding: 14px 22px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1.1em;
+            transition: background-color 0.3s ease;
+            display: block;
+            width: 100%;
+            margin-top: 20px;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        #results {
+            margin-top: 30px;
+            padding: 25px;
+            background-color: #e9ecef;
+            border-left: 6px solid #4CAF50;
+            border-radius: 5px;
+        }
+        #results h3, #results h4 {
+            margin-top: 15px;
+        }
+        #results ul {
+            padding-left: 20px;
+            list-style: disc;
+        }
+        .warning {
+            color: #856404;
+            font-weight: bold;
+            margin-bottom: 20px;
+            padding: 15px;
+            background-color: #fff3cd;
+            border: 1px solid #ffeeba;
+            border-radius: 5px;
+            text-align: center;
+        }
+        .risk-low { color: #28a745; font-weight: bold; }
+        .risk-moderate { color: #fd7e14; font-weight: bold; }
+        .risk-high { color: #dc3545; font-weight: bold; }
+        .required-mark { color: #dc3545; margin-left: 3px;}
+        .section-title {
+            font-size: 1.6em;
+            color: #4CAF50;
+            border-bottom: 2px solid #4CAF50;
+            padding-bottom: 8px;
+            margin-top: 35px;
+            margin-bottom: 25px;
+        }
+
+        /* 한의원 추천 섹션 스타일 */
+        #clinicRecommendations {
+            margin-top: 35px; 
+            padding: 25px; 
+            border: 1px solid #e0e0e0;
+            border-radius: 8px; 
+            background-color: #f8f9fa;
+        }
+        #clinicRecommendations h3 { /* "전문 한의원 상담 안내" 제목 */
+            color: #333; 
+            border-bottom: 2px solid #5cb85c;
+            padding-bottom: 10px; 
+            margin-bottom: 20px;
+            font-size: 1.4em;
+        }
+        #clinicRecommendations > p { /* 안내 문구 */
+            font-size: 1.1em; 
+            color: #555; 
+            line-height: 1.6; 
+            margin-bottom: 25px;
+        }
+        .region-selector button { /* 지역 선택 버튼 공통 스타일 */
+            background-color: #5cb85c;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.95em;
+            margin-right: 10px;
+            margin-bottom: 10px;
+            transition: background-color 0.2s ease;
+        }
+        .region-selector button:hover {
+            background-color: #4cae4c;
+        }
+        .region-selector button.active { /* 선택된 버튼 스타일 */
+             background-color: #388e3c;
+             font-weight: bold;
+        }
+
+        .clinic-info-wrapper { /* 개별 한의원 정보 카드 래퍼 */
+             margin-bottom: 18px;
+        }
+        .clinic-info { /* 개별 한의원 정보 카드 */
+            padding: 15px; 
+            border-left: 4px solid #a5d6a7;
+            background-color: #ffffff; 
+            border-radius: 6px; 
+            box-shadow: 0 2px 5px rgba(0,0,0,0.07);
+        }
+        .clinic-info h5 {
+            margin-top: 0; 
+            margin-bottom: 10px; 
+            font-size: 1.1em; 
+            color: #388e3c;
+        }
+        .clinic-info p {
+            margin: 6px 0;
+            font-size: 0.95em;
+            color: #424242;
+        }
+        .clinic-info strong {
+            color: #212121;
+        }
+        .clinic-info a {
+            color: #007bff;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        .clinic-info a:hover {
+            text-decoration: underline;
+        }
     </style>
 </head>
-<body class="bg-gray-100">
+<body>
+    <div class="container">
+        <h1>인슐린 저항성 자가 테스트 (고급형)</h1>
+        <p class="warning"><strong>주의:</strong> 이 설문은 의학적 진단을 대체할 수 없으며, 참고용으로만 사용해주십시오. 건강 문제나 우려 사항이 있으시면 반드시 <strong>한의사 또는 의사</strong>와 상담하시기 바랍니다.</p>
 
-    <div class="survey-container">
-        <header class="survey-header">
-            <h1 class="survey-title">인슐린 저항성 상세 자가 체크</h1>
-            <p class="survey-description">본 설문은 참고용이며, 의학적 진단을 대체할 수 없습니다.<br>결과 해석 시 반드시 주의사항을 숙지해 주십시오.</p>
-        </header>
+        <form id="insulinSurvey">
+            <h2 class="section-title">기본 정보</h2>
+            <div>
+                <label for="age">나이 (세)<span class="required-mark">*</span>:</label>
+                <input type="number" id="age" name="age" required>
+            </div>
+            <div>
+                <label for="height">키 (cm)<span class="required-mark">*</span>:</label>
+                <input type="number" id="height" name="height" step="0.1" required>
+            </div>
+            <div>
+                <label for="weight">체중 (kg)<span class="required-mark">*</span>:</label>
+                <input type="number" id="weight" name="weight" step="0.1" required>
+            </div>
+            <div>
+                <label for="gender">성별<span class="required-mark">*</span>:</label>
+                <select id="gender" name="gender" required>
+                    <option value="">선택하세요</option>
+                    <option value="male">남성</option>
+                    <option value="female">여성</option>
+                </select>
+            </div>
 
-        <form id="insulinResistanceFormAdv">
-            <section>
-                <h2 class="section-title">I. 기본 정보</h2>
-                <div class="question-group grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4">
-                    <div>
-                        <label for="name" class="block text-sm font-medium text-gray-700">성함 (선택):</label>
-                        <input type="text" id="name" name="name" class="input-field">
-                    </div>
-                    <div>
-                        <label for="age" class="block text-sm font-medium text-gray-700">나이 (만):<span class="text-red-500">*</span></label>
-                        <input type="number" id="age" name="age" class="input-field" required>
-                    </div>
-                    <div>
-                        <label for="height" class="block text-sm font-medium text-gray-700">키 (cm):<span class="text-red-500">*</span></label>
-                        <input type="number" id="height" name="height" class="input-field" required>
-                    </div>
-                    <div>
-                        <label for="weight" class="block text-sm font-medium text-gray-700">체중 (kg):<span class="text-red-500">*</span></label>
-                        <input type="number" id="weight" name="weight" class="input-field" required>
-                    </div>
-                    <div class="md:col-span-2">
-                        <label class="block text-sm font-medium text-gray-700">성별:<span class="text-red-500">*</span></label>
-                        <div class="mt-2 flex space-x-4">
-                            <div class="question-item !mb-0"><input type="radio" id="gender_male" name="gender" value="male" required><label for="gender_male" class="radio-label">남성</label></div>
-                            <div class="question-item !mb-0"><input type="radio" id="gender_female" name="gender" value="female"><label for="gender_female" class="radio-label">여성</label></div>
-                        </div>
-                    </div>
-                </div>
-            </section>
+            <h2 class="section-title">위험 요인 체크</h2>
+            <div class="checkbox-group">
+                <input type="checkbox" id="familyDiabetes" name="riskFactors" value="familyDiabetes"> <label for="familyDiabetes">당뇨병 가족력 (부모, 형제자매)</label><br>
+                <input type="checkbox" id="sedentaryLifestyle" name="riskFactors" value="sedentaryLifestyle"> <label for="sedentaryLifestyle">좌식 생활 (하루 대부분 앉아있고, 규칙적인 운동 안 함)</label><br>
+                <input type="checkbox" id="highBloodPressure" name="riskFactors" value="highBloodPressure"> <label for="highBloodPressure">고혈압 진단 또는 혈압약 복용 중</label><br>
+                <input type="checkbox" id="dyslipidemia" name="riskFactors" value="dyslipidemia"> <label for="dyslipidemia">이상지질혈증(고지혈증) 진단 또는 약 복용 중</label><br>
+                <input type="checkbox" id="gestationalDiabetes" name="riskFactors" value="gestationalDiabetes" class="female-only"> <label for="gestationalDiabetes">과거 임신성 당뇨병 진단 경험 (여성)</label><br>
+                <input type="checkbox" id="pcos" name="riskFactors" value="pcos" class="female-only"> <label for="pcos">다낭성 난소 증후군 진단 경험 (여성)</label><br>
+                <input type="checkbox" id="sleepDeprivation" name="riskFactors" value="sleepDeprivation"> <label for="sleepDeprivation">만성적인 수면 부족 (평균 수면 시간 6시간 미만)</label><br>
+                <input type="checkbox" id="highCarbDiet" name="riskFactors" value="highCarbDiet"> <label for="highCarbDiet">고탄수화물/가공식품 위주의 식단</label><br>
+                <input type="checkbox" id="smoking" name="riskFactors" value="smoking"> <label for="smoking">흡연</label><br>
+            </div>
 
-            <section>
-                <h2 class="section-title">II. 위험 요인 체크</h2>
-                <p class="text-sm text-gray-600 mb-4">다음 중 본인에게 해당되는 항목을 모두 선택해 주세요.</p>
-                <div class="question-group">
-                    <div class="question-item"><input type="checkbox" id="rf1" name="risk_factor" value="과체중/복부비만"><label for="rf1">과체중이거나 복부 비만이다 (BMI 또는 허리둘레 기준).</label></div>
-                    <div class="question-item"><input type="checkbox" id="rf2" name="risk_factor" value="가족력_당뇨병"><label for="rf2">가족 중에 당뇨병 환자가 있다 (부모, 형제자매).</label></div>
-                    <div class="question-item"><input type="checkbox" id="rf3" name="risk_factor" value="좌식생활"><label for="rf3">평소 신체 활동량이 매우 적고, 주로 앉아서 생활한다.</label></div>
-                    <div class="question-item"><input type="checkbox" id="rf4" name="risk_factor" value="고혈압"><label for="rf4">고혈압 진단을 받았거나 혈압이 높은 편이다 (수축기 130mmHg 또는 이완기 85mmHg 이상).</label></div>
-                    <div class="question-item"><input type="checkbox" id="rf5" name="risk_factor" value="이상지질혈증"><label for="rf5">이상지질혈증(고지혈증) 진단을 받았거나, 혈중 중성지방 수치가 높거나 HDL 콜레스테롤 수치가 낮다.</label></div>
-                    <div class="question-item"><input type="checkbox" id="rf6" name="risk_factor" value="임신성당뇨병력"><label for="rf6">과거 임신성 당뇨병을 진단받은 적이 있다 (여성).</label></div>
-                    <div class="question-item"><input type="checkbox" id="rf7" name="risk_factor" value="다낭성난소증후군"><label for="rf7">다낭성 난소 증후군 진단을 받은 적이 있다 (여성).</label></div>
-                    <div class="question-item"><input type="checkbox" id="rf8" name="risk_factor" value="수면부족"><label for="rf8">만성적으로 수면이 부족하거나 수면의 질이 좋지 않다.</label></div>
-                    <div class="question-item"><input type="checkbox" id="rf9" name="risk_factor" value="고탄수화물식단"><label for="rf9">흰쌀밥, 빵, 면, 떡, 과자, 단 음료 등 정제 탄수화물 및 당분 섭취가 잦다.</label></div>
-                    <div class="question-item"><input type="checkbox" id="rf10" name="risk_factor" value="흡연"><label for="rf10">현재 흡연 중이다.</label></div>
-                </div>
-            </section>
-
-            <section>
-                <h2 class="section-title">III. 주요 증상 체크</h2>
-                <p class="text-sm text-gray-600 mb-4">최근 경험하고 있는 증상 중 해당되는 항목을 모두 선택해 주세요.</p>
-                <div class="question-group">
-                    <div class="question-item"><input type="checkbox" id="s1" name="symptom" value="식후피로감"><label for="s1">식사 후에 심한 피로감이나 졸음이 몰려온다.</label></div>
-                    <div class="question-item"><input type="checkbox" id="s2" name="symptom" value="단음식갈망"><label for="s2">단 음식이나 탄수화물(빵, 면 등)이 계속 당긴다.</label></div>
-                    <div class="question-item"><input type="checkbox" id="s3" name="symptom" value="체중증가_복부"><label for="s3">특별한 이유 없이 체중이 늘거나, 특히 복부 지방이 늘었다.</label></div>
-                    <div class="question-item"><input type="checkbox" id="s4" name="symptom" value="공복감_잦음"><label for="s4">식사를 해도 금방 허기지고, 자주 배가 고프다.</label></div>
-                    <div class="question-item"><input type="checkbox" id="s5" name="symptom" value="피부문제_흑색극세포증"><label for="s5">목 뒤, 겨드랑이, 사타구니 등 피부가 접히는 부분이 거뭇거뭇하고 두꺼워졌다 (흑색극세포증).</label></div>
-                    <div class="question-item"><input type="checkbox" id="s6" name="symptom" value="집중력저하_기억력감퇴"><label for="s6">집중력이 떨어지고 기억력이 예전 같지 않다 (브레인 포그).</label></div>
-                    <div class="question-item"><input type="checkbox" id="s7" name="symptom" value="잦은갈증_다뇨"><label for="s7">목이 자주 마르고 소변을 자주 본다.</label></div>
-                    <div class="question-item"><input type="checkbox" id="s8" name="symptom" value="손발저림_감각이상"><label for="s8">손이나 발이 저리거나 감각이 둔해지는 느낌이 있다.</label></div>
-                    <div class="question-item"><input type="checkbox" id="s9" name="symptom" value="만성피로_무기력"><label for="s9">충분히 쉬어도 피로가 잘 풀리지 않고 무기력하다.</label></div>
-                    <div class="question-item"><input type="checkbox" id="s10" name="symptom" value="잦은염증_상처회복지연"><label for="s10">피부에 염증이 자주 생기거나 상처가 잘 아물지 않는다.</label></div>
-                </div>
-            </section>
-
-            <button type="submit" id="showResultButtonAdv" class="result-button">결과 분석 및 위험도 보기</button>
+            <h2 class="section-title">주요 증상 체크</h2>
+            <div class="checkbox-group">
+                <input type="checkbox" id="postMealFatigue" name="symptoms" value="postMealFatigue"> <label for="postMealFatigue">식후 심한 피로감이나 졸음</label><br>
+                <input type="checkbox" id="sugarCravings" name="symptoms" value="sugarCravings"> <label for="sugarCravings">단 음식이나 탄수화물에 대한 강한 갈망</label><br>
+                <input type="checkbox" id="abdominalObesity" name="symptoms" value="abdominalObesity"> <label for="abdominalObesity">복부 비만 (허리둘레 증가)</label><br>
+                <input type="checkbox" id="frequentHunger" name="symptoms" value="frequentHunger"> <label for="frequentHunger">식사 후에도 금방 배고픔을 느낌</label><br>
+                <input type="checkbox" id="skinProblems" name="symptoms" value="skinProblems"> <label for="skinProblems">피부 문제 (예: 쥐젖, 여드름, 피부가 검게 착색되는 흑색극세포증 - 겨드랑이, 목뒤 등)</label><br>
+                <input type="checkbox" id="concentrationDifficulties" name="symptoms" value="concentrationDifficulties"> <label for="concentrationDifficulties">집중력 저하 및 머리가 맑지 않은 느낌</label><br>
+                <input type="checkbox" id="increasedThirst" name="symptoms" value="increasedThirst"> <label for="increasedThirst">잦은 갈증 또는 다뇨</label><br>
+                <input type="checkbox" id="tinglingSensation" name="symptoms" value="tinglingSensation"> <label for="tinglingSensation">손발 저림 또는 따끔거림 (뚜렷한 원인 없이)</label><br>
+                <input type="checkbox" id="chronicFatigue" name="symptoms" value="chronicFatigue"> <label for="chronicFatigue">만성적인 피로감 (충분히 자도 개운하지 않음)</label><br>
+                <input type="checkbox" id="frequentInfections" name="symptoms" value="frequentInfections"> <label for="frequentInfections">잦은 염증이나 감염 (예: 질염, 방광염, 피부 감염 등)</label><br>
+            </div>
+            
+            <button type="button" onclick="analyzeResults()">결과 분석하기</button>
         </form>
 
-        <div id="resultDisplayAdv" class="result-display hidden">
-            <h3>인슐린 저항성 자가 체크 결과</h3>
-            <div id="basicInfoResult" class="result-item"></div>
-            <div id="bmiResult" class="result-item"></div>
-            <div id="riskFactorScoreResult" class="result-item"></div>
-            <div id="symptomScoreResult" class="result-item"></div>
-            <div id="totalScoreResult" class="result-item font-semibold"></div>
-            <div id="riskLevelResult" class="risk-level"></div>
-            <p class="mt-6 text-sm">위험도 평가는 일반적인 참고 자료이며, 개인의 건강 상태에 따라 다를 수 있습니다. 정확한 진단 및 건강 관리는 반드시 의사 또는 의료 전문가와 상담하시기 바랍니다.</p>
-        </div>
-
-        <div class="disclaimer">
-            <strong>⚠️ 중요 안내사항 ⚠️</strong><br>
-            본 설문지는 의학적 진단 도구가 아니며, 교육 및 정보 제공 목적으로만 사용될 수 있습니다. 제시된 항목들은 인슐린 저항성과 관련될 수 있는 일반적인 위험 요인 및 증상이며, 개인의 건강 상태는 매우 다양할 수 있습니다. 이 설문 결과에만 의존하여 스스로 건강 상태를 판단하거나 치료를 결정해서는 안 됩니다. 건강에 대한 우려나 특정 증상이 있다면, 반드시 의사 또는 자격을 갖춘 의료 전문가와 상담하여 정확한 진단과 적절한 조언을 받으시기 바랍니다. 가중치 및 위험도 평가는 일반적인 경향을 단순화한 예시이며, 모든 개인에게 동일하게 적용될 수 없습니다.
-        </div>
+        <div id="results"></div>
     </div>
 
     <script>
-        document.getElementById('insulinResistanceFormAdv').addEventListener('submit', function(event) {
-            event.preventDefault(); // 폼 기본 제출 방지
+        const clinicsData = {
+            "서울": {
+                "성북구": [
+                    { name: "길음한의원", address: "성북구 길음로 10, 2층", contact: "02-943-1668", website: "https://goodnewshani.my.canva.site", websiteLabel: "홈페이지" }
+                ],
+                "중랑구": [
+                    { name: "바로유한의원", address: "서울 중랑구 사가정로52길 22 광현빌딩 2층, 5층", contact: "0507-1314-8905", website: "https://www.baroyou.net/", websiteLabel: "홈페이지" }
+                ],
+                "강서구": [
+                    { name: "다가온한의원", address: "서울 강서구 강서로 43-17 오거닉스타워 202호", contact: "02-2068-1075", website: "https://blog.naver.com/jenniesjh2", websiteLabel: "블로그" }
+                ],
+                "강남구": [
+                    { name: "경희진평한의원", address: "서울 강남구 테헤란로 333 지하1층", contact: "0507-1376-6603", website: "https://blog.naver.com/david3140", websiteLabel: "블로그" }
+                ]
+            }
+            // 다른 주요 지역 추가 가능
+        };
 
-            // 기본 정보 가져오기
-            const age = parseInt(document.getElementById('age').value);
-            const heightCm = parseFloat(document.getElementById('height').value);
-            const weightKg = parseFloat(document.getElementById('weight').value);
-            const gender = document.querySelector('input[name="gender"]:checked')?.value;
+        document.addEventListener('DOMContentLoaded', function() {
+            const genderSelect = document.getElementById('gender');
+            const femaleOnlyElements = document.querySelectorAll('.female-only');
 
-            if (isNaN(age) || isNaN(heightCm) || isNaN(weightKg) || !gender) {
+            function toggleFemaleSpecificFields() {
+                const isFemale = genderSelect.value === 'female';
+                femaleOnlyElements.forEach(el => {
+                    const checkbox = el.querySelector('input[type="checkbox"]');
+                    if (checkbox) {
+                        checkbox.disabled = !isFemale;
+                        if (!isFemale) checkbox.checked = false; 
+                    }
+                    el.style.opacity = isFemale ? 1 : 0.5;
+                });
+            }
+            genderSelect.addEventListener('change', toggleFemaleSpecificFields);
+            toggleFemaleSpecificFields();
+        });
+
+        function analyzeResults() {
+            const ageInput = document.getElementById('age');
+            const heightInput = document.getElementById('height');
+            const weightInput = document.getElementById('weight');
+            const genderInput = document.getElementById('gender');
+
+            const age = parseInt(ageInput.value);
+            const height = parseFloat(heightInput.value);
+            const weight = parseFloat(weightInput.value);
+            const gender = genderInput.value;
+
+            if (isNaN(age) || age <= 0 || isNaN(height) || height <= 0 || isNaN(weight) || weight <= 0 || !gender) {
                 alert("나이, 키, 체중, 성별을 모두 올바르게 입력해주세요.");
                 return;
             }
 
-            // BMI 계산
-            const heightM = heightCm / 100;
-            const bmi = weightKg / (heightM * heightM);
-            let bmiCategory = "";
-            if (bmi < 18.5) bmiCategory = "저체중";
-            else if (bmi < 23) bmiCategory = "정상";
-            else if (bmi < 25) bmiCategory = "과체중";
-            else if (bmi < 30) bmiCategory = "경도 비만";
-            else bmiCategory = "중등도 이상 비만";
+            let score = 0;
+            let analysisText = "<h3>📊 검사 결과 분석</h3>";
 
-            let totalScore = 0;
-
-            // 1. BMI에 따른 가중치
-            if (bmi >= 23 && bmi < 25) totalScore += 1; // 과체중
-            else if (bmi >= 25 && bmi < 30) totalScore += 2; // 경도 비만
-            else if (bmi >= 30) totalScore += 3; // 중등도 이상 비만
-
-            // 2. 나이에 따른 가중치
-            if (age >= 40 && age < 50) totalScore += 1;
-            else if (age >= 50) totalScore += 2;
-
-            // 3. 위험 요인 체크 및 가중치
-            let riskFactorBaseScore = 0;
-            const riskFactors = document.querySelectorAll('input[name="risk_factor"]:checked');
-            riskFactors.forEach(rf => {
-                riskFactorBaseScore += 1; // 각 항목당 기본 1점
-                // 특정 위험 요인에 대한 추가 가중치 (예시)
-                if (rf.id === 'rf2') totalScore += 1; // 당뇨병 가족력: 추가 1점
-                if (rf.id === 'rf4' || rf.id === 'rf5') totalScore += 1; // 고혈압 또는 이상지질혈증: 추가 1점
-                if (gender === 'female') {
-                    if (rf.id === 'rf6') totalScore += 1; // 여성 + 임신성 당뇨병력: 추가 1점
-                    if (rf.id === 'rf7') totalScore += 1; // 여성 + 다낭성난소증후군: 추가 1점
-                }
-            });
-            totalScore += riskFactorBaseScore; // 위험요인 기본 점수 합산
-
-            // 4. 주요 증상 체크 및 가중치
-            let symptomBaseScore = 0;
-            const symptoms = document.querySelectorAll('input[name="symptom"]:checked');
-            symptoms.forEach(s => {
-                symptomBaseScore += 1; // 각 항목당 기본 1점
-                 // 특정 증상에 대한 추가 가중치 (예시)
-                if (s.id === 's5') totalScore += 1; // 흑색극세포증: 추가 1점
-            });
-            totalScore += symptomBaseScore; // 증상 기본 점수 합산
-
-            // 위험도 평가 (예시 기준)
-            let riskLevel = "";
-            let riskLevelClass = "";
-            if (totalScore <= 5) {
-                riskLevel = "낮음";
-                riskLevelClass = "risk-low";
-            } else if (totalScore <= 10) {
-                riskLevel = "주의";
-                riskLevelClass = "risk-moderate";
-            } else {
-                riskLevel = "높음";
-                riskLevelClass = "risk-high";
-            }
-
-            // 결과 표시
-            document.getElementById('basicInfoResult').innerHTML = `<strong>나이:</strong> 만 ${age}세, <strong>성별:</strong> ${gender === 'male' ? '남성' : '여성'}`;
-            document.getElementById('bmiResult').innerHTML = `<strong>BMI:</strong> ${bmi.toFixed(2)} (${bmiCategory})`;
-            document.getElementById('riskFactorScoreResult').innerHTML = `<strong>위험 요인 점수(가중치 포함):</strong> ${riskFactorBaseScore + (totalScore - riskFactorBaseScore - symptomBaseScore)} 점 (선택 개수: ${riskFactors.length}개)`;
-            document.getElementById('symptomScoreResult').innerHTML = `<strong>주요 증상 점수(가중치 포함):</strong> ${symptomBaseScore + (totalScore - riskFactorBaseScore - symptomBaseScore - (totalScore - riskFactorBaseScore - symptomBaseScore))} 점 (선택 개수: ${symptoms.length}개)`; // 복잡해서 단순화 필요
-            document.getElementById('totalScoreResult').innerHTML = `<strong>총점 (가중치 적용):</strong> ${totalScore} 점`;
+            const heightInMeters = height / 100;
+            const bmi = weight / (heightInMeters * heightInMeters);
+            analysisText += `<p><strong>BMI:</strong> ${bmi.toFixed(2)} `;
+            if (bmi < 18.5) analysisText += "(저체중)";
+            else if (bmi < 23) { analysisText += "(정상체중)"; }
+            else if (bmi < 25) { analysisText += "(과체중)"; score += 2; }
+            else if (bmi < 30) { analysisText += "(경도비만)"; score += 3; }
+            else { analysisText += "(중등도이상 비만)"; score += 4; }
+            analysisText += "</p>";
             
-            const riskLevelElement = document.getElementById('riskLevelResult');
-            riskLevelElement.textContent = `종합 위험도: ${riskLevel}`;
-            riskLevelElement.className = `risk-level ${riskLevelClass}`; // 기존 클래스 초기화 후 새 클래스 적용
+            if (age >= 40 && age < 50) { score += 1; analysisText += "<p><strong>나이대:</strong> 40대 (주의 시작 구간 +1점)</p>"; }
+            else if (age >= 50) { score += 2; analysisText += "<p><strong>나이대:</strong> 50대 이상 (위험 증가 구간 +2점)</p>"; }
 
-            document.getElementById('resultDisplayAdv').classList.remove('hidden');
-            document.getElementById('resultDisplayAdv').scrollIntoView({ behavior: 'smooth' });
-        });
+            let riskFactorDetails = "<h4>위험 요인</h4><ul>";
+            let riskFactorCount = 0;
+            document.querySelectorAll('input[name="riskFactors"]:checked').forEach(item => {
+                riskFactorCount++;
+                let factorWeight = 1; let factorText = item.nextElementSibling.textContent;
+                if (item.value === 'familyDiabetes') { factorWeight = 2; factorText += " (+2점)"; }
+                if (item.value === 'highBloodPressure' || item.value === 'dyslipidemia') { factorWeight = 2; factorText += " (+2점)";}
+                if (gender === 'female' && (item.value === 'gestationalDiabetes' || item.value === 'pcos')) { factorWeight = 2; factorText += " (+2점)";}
+                if (item.value === 'highCarbDiet') { factorWeight = 2; factorText += " (+2점)";}
+                score += factorWeight; riskFactorDetails += `<li>${factorText}</li>`;
+            });
+            riskFactorDetails += (riskFactorCount === 0) ? "<li>선택된 위험 요인 없음</li></ul>" : "</ul>";
+            analysisText += riskFactorDetails;
+
+            let symptomDetails = "<h4>주요 증상</h4><ul>";
+            let symptomCount = 0;
+            document.querySelectorAll('input[name="symptoms"]:checked').forEach(item => {
+                symptomCount++; let symptomWeight = 1; let symptomText = item.nextElementSibling.textContent; 
+                if (item.value === 'abdominalObesity') { symptomWeight = 2; symptomText += " (+2점)"; }
+                else if (item.value === 'skinProblems') { 
+                    const skinProblemLabel = item.nextElementSibling.textContent;
+                    if (skinProblemLabel.includes("흑색극세포증")) { symptomWeight = 3; symptomText = skinProblemLabel + " (+3점)"; }
+                    else { symptomWeight = 1; symptomText = skinProblemLabel + " (+1점)"; }
+                }
+                else if (item.value === 'sugarCravings' || item.value === 'postMealFatigue') { symptomWeight = 2; symptomText += " (+2점)"; }
+                else { symptomText += " (+1점)"; }
+                score += symptomWeight; symptomDetails += `<li>${symptomText}</li>`;
+            });
+            symptomDetails += (symptomCount === 0) ? "<li>선택된 주요 증상 없음</li></ul>" : "</ul>";
+            analysisText += symptomDetails;
+
+            analysisText += `<p><strong>총 점수:</strong> ${score}점</p>`;
+            let riskLevelText = "";
+            if (score < 5) riskLevelText = "<span class='risk-low'>낮음</span>";
+            else if (score < 10) riskLevelText = "<span class='risk-moderate'>주의</span>";
+            else if (score < 15) riskLevelText = "<span class='risk-high'>높음</span>";
+            else riskLevelText = "<span class='risk-high'>매우 높음</span>";
+            analysisText += `<p><strong>위험도 평가:</strong> ${riskLevelText} - ${getRiskDescription(score)}</p>`;
+            
+            const resultsDiv = document.getElementById('results');
+            resultsDiv.innerHTML = analysisText;
+            
+            // 한의원 추천 섹션 초기화 및 생성
+            initializeClinicFinder(resultsDiv);
+        }
+
+        function getRiskDescription(score) {
+            if (score < 5) return "현재 인슐린 저항성 위험이 낮아 보입니다. 건강한 생활 습관을 유지하세요.";
+            if (score < 10) return "인슐린 저항성 위험에 주의가 필요합니다. 생활 습관 개선을 고려해보세요.";
+            if (score < 15) return "인슐린 저항성 위험이 높은 편입니다. 전문가와 상담을 권장합니다.";
+            return "인슐린 저항성 위험이 매우 높습니다. 반드시 전문가와 상담하여 정확한 진단과 관리를 받으시길 바랍니다.";
+        }
+
+        function initializeClinicFinder(resultsDiv) {
+            const recommendationsDiv = document.createElement('div');
+            recommendationsDiv.id = 'clinicRecommendations';
+            recommendationsDiv.innerHTML = `
+                <h3>전문 한의원 상담 안내</h3>
+                <p>보다 전문적이고 자세한 내용은 설문 결과와 관계 없이, 아래 지역별 거점 한의원을 방문하여 심층적인 진료 및 상담을 받아보시는 것을 권해드립니다.</p>
+                <div id="majorRegionSelector" class="region-selector"></div>
+                <div id="subRegionSelector" class="region-selector" style="margin-top:15px; display:none;"></div>
+                <div id="clinicDisplay" style="margin-top:20px;"></div>
+            `;
+            resultsDiv.appendChild(recommendationsDiv);
+
+            const majorRegionSelector = document.getElementById('majorRegionSelector');
+            for (const majorRegion in clinicsData) {
+                const button = document.createElement('button');
+                button.textContent = majorRegion;
+                button.onclick = () => showSubRegions(majorRegion);
+                majorRegionSelector.appendChild(button);
+            }
+        }
+
+        function showSubRegions(majorRegionName) {
+            // 활성화된 버튼 스타일 업데이트
+            const majorButtons = document.querySelectorAll('#majorRegionSelector button');
+            majorButtons.forEach(btn => {
+                btn.classList.toggle('active', btn.textContent === majorRegionName);
+            });
+
+            const subRegionSelector = document.getElementById('subRegionSelector');
+            const clinicDisplay = document.getElementById('clinicDisplay');
+            subRegionSelector.innerHTML = ''; // 이전 내용 초기화
+            clinicDisplay.innerHTML = ''; // 이전 내용 초기화
+            subRegionSelector.style.display = 'block';
+
+            const subRegions = clinicsData[majorRegionName];
+            for (const subRegion in subRegions) {
+                const button = document.createElement('button');
+                button.textContent = subRegion;
+                button.onclick = () => showClinicDetails(majorRegionName, subRegion);
+                subRegionSelector.appendChild(button);
+            }
+        }
+
+        function showClinicDetails(majorRegionName, subRegionName) {
+             // 활성화된 버튼 스타일 업데이트
+            const subButtons = document.querySelectorAll('#subRegionSelector button');
+            subButtons.forEach(btn => {
+                btn.classList.toggle('active', btn.textContent === subRegionName);
+            });
+
+            const clinicDisplay = document.getElementById('clinicDisplay');
+            clinicDisplay.innerHTML = ''; // 이전 내용 초기화
+
+            const clinics = clinicsData[majorRegionName][subRegionName];
+            clinics.forEach(clinic => {
+                const clinicDivWrapper = document.createElement('div');
+                clinicDivWrapper.className = 'clinic-info-wrapper';
+
+                const clinicDiv = document.createElement('div');
+                clinicDiv.className = 'clinic-info';
+                clinicDiv.innerHTML = `
+                    <h5>${clinic.name}</h5>
+                    <p><strong>주소:</strong> ${clinic.address}</p>
+                    <p><strong>연락처:</strong> ${clinic.contact}</p>
+                    ${clinic.website ? `<p><strong>${clinic.websiteLabel}:</strong> <a href="${clinic.website}" target="_blank">${clinic.website.replace(/^(https?:\/\/)?(www\.)?/, '')}</a></p>` : ''}
+                `;
+                clinicDivWrapper.appendChild(clinicDiv);
+                clinicDisplay.appendChild(clinicDivWrapper);
+            });
+        }
+
     </script>
-
 </body>
 </html>
