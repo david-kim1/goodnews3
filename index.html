@@ -33,6 +33,7 @@
         h1 { text-align: center; color: #5a6e5a; margin-bottom: 25px; }
         .section-title { font-size: 1.6em; color: #5a6e5a; border-bottom: 2px solid #5a6e5a; padding-bottom: 8px; margin-top: 35px; margin-bottom: 25px; }
         
+        /* 버튼 공통 스타일 */
         button, .btn {
             color: white;
             padding: 14px 22px;
@@ -46,9 +47,22 @@
             margin-top: 20px;
             box-sizing: border-box;
             text-align: center;
+            text-decoration: none;
         }
         #analyzeBtn { background-color: #5a6e5a; }
         #analyzeBtn:hover { background-color: #4a5c4a; }
+
+        /* 지역 선택 버튼 스타일 수정 */
+        .region-selector button {
+            background-color: #87CEEB; /* 하늘색 계열 */
+            color: #ffffff;
+            margin-right: 10px;
+            margin-bottom: 10px;
+        }
+        .region-selector button.active {
+            background-color: #5F9EA0; /* 선택 시 더 진한 하늘색 */
+            font-weight: bold;
+        }
 
         .action-buttons {
             margin-top: 30px;
@@ -61,7 +75,6 @@
             flex-grow: 1;
             padding: 12px 20px;
             font-size: 1em;
-            text-decoration: none;
         }
         .btn-gohome {
             background-color: #5a6e5a;
@@ -91,299 +104,4 @@
 
 <div class="header">
     <a href="https://goodnewshani.my.canva.site/">
-        <img src="https://i.imgur.com/wVykd9E.jpeg" alt="길음한의원 로고" style="max-height: 40px;">
-    </a>
-</div>
-
-<div class="container">
-    <h1>인슐린 저항성 자가 테스트</h1>
-    <p class="warning"><strong>주의:</strong> 이 설문은 의학적 진단을 대체할 수 없으며, 참고용으로만 사용해주십시오. 건강 문제나 우려 사항이 있으시면 반드시 <strong>한의사 또는 의사</strong>와 상담하시기 바랍니다.</p>
-    
-    <form id="insulinSurvey">
-        <h2 class="section-title">기본 정보</h2>
-        <div><label for="age">나이 (세)<span class="required-mark">*</span>:</label><input type="number" id="age" name="age" required></div>
-        <div><label for="height">키 (cm)<span class="required-mark">*</span>:</label><input type="number" id="height" name="height" step="0.1" required></div>
-        <div><label for="weight">체중 (kg)<span class="required-mark">*</span>:</label><input type="number" id="weight" name="weight" step="0.1" required></div>
-        <div><label for="gender">성별<span class="required-mark">*</span>:</label><select id="gender" name="gender" required><option value="">선택하세요</option><option value="male">남성</option><option value="female">여성</option></select></div>
-        <h2 class="section-title">위험 요인 체크</h2>
-        <div class="checkbox-group"><input type="checkbox" id="familyDiabetes" name="riskFactors" value="familyDiabetes"> <label for="familyDiabetes">당뇨병 가족력 (부모, 형제자매)</label><br><input type="checkbox" id="sedentaryLifestyle" name="riskFactors" value="sedentaryLifestyle"> <label for="sedentaryLifestyle">좌식 생활 (하루 대부분 앉아있고, 규칙적인 운동 안 함)</label><br><input type="checkbox" id="highBloodPressure" name="riskFactors" value="highBloodPressure"> <label for="highBloodPressure">고혈압 진단 또는 혈압약 복용 중</label><br><input type="checkbox" id="dyslipidemia" name="riskFactors" value="dyslipidemia"> <label for="dyslipidemia">이상지질혈증(고지혈증) 진단 또는 약 복용 중</label><br><input type="checkbox" id="gestationalDiabetes" name="riskFactors" value="gestationalDiabetes" class="female-only"> <label for="gestationalDiabetes">과거 임신성 당뇨병 진단 경험 (여성)</label><br><input type="checkbox" id="pcos" name="riskFactors" value="pcos" class="female-only"> <label for="pcos">다낭성 난소 증후군 진단 경험 (여성)</label><br><input type="checkbox" id="sleepDeprivation" name="riskFactors" value="sleepDeprivation"> <label for="sleepDeprivation">만성적인 수면 부족 (평균 수면 시간 6시간 미만)</label><br><input type="checkbox" id="highCarbDiet" name="riskFactors" value="highCarbDiet"> <label for="highCarbDiet">고탄수화물/가공식품 위주의 식단</label><br><input type="checkbox" id="smoking" name="riskFactors" value="smoking"> <label for="smoking">흡연</label><br></div>
-        <h2 class="section-title">주요 증상 체크</h2>
-        <div class="checkbox-group"><input type="checkbox" id="postMealFatigue" name="symptoms" value="postMealFatigue"> <label for="postMealFatigue">식후 심한 피로감이나 졸음</label><br><input type="checkbox" id="sugarCravings" name="symptoms" value="sugarCravings"> <label for="sugarCravings">단 음식이나 탄수화물에 대한 강한 갈망</label><br><input type="checkbox" id="abdominalObesity" name="symptoms" value="abdominalObesity"> <label for="abdominalObesity">복부 비만 (허리둘레 증가)</label><br><input type="checkbox" id="frequentHunger" name="symptoms" value="frequentHunger"> <label for="frequentHunger">식사 후에도 금방 배고픔을 느낌</label><br><input type="checkbox" id="skinProblems" name="symptoms" value="skinProblems"> <label for="skinProblems">피부 문제 (예: 쥐젖, 여드름, 흑색극세포증 - 겨드랑이, 목뒤 등)</label><br><input type="checkbox" id="concentrationDifficulties" name="symptoms" value="concentrationDifficulties"> <label for="concentrationDifficulties">집중력 저하 및 머리가 맑지 않은 느낌</label><br><input type="checkbox" id="increasedThirst" name="symptoms" value="increasedThirst"> <label for="increasedThirst">잦은 갈증 또는 다뇨</label><br><input type="checkbox" id="tinglingSensation" name="symptoms" value="tinglingSensation"> <label for="tinglingSensation">손발 저림 또는 따끔거림 (뚜렷한 원인 없이)</label><br><input type="checkbox" id="chronicFatigue" name="symptoms" value="chronicFatigue"> <label for="chronicFatigue">만성적인 피로감 (충분히 자도 개운하지 않음)</label><br><input type="checkbox" id="frequentInfections" name="symptoms" value="frequentInfections"> <label for="frequentInfections">잦은 염증이나 감염 (예: 질염, 방광염, 피부 감염 등)</label><br></div>
-        <h2 class="section-title">한의학적 증상 체크 (습담 예측)</h2>
-        <p style="text-align:center; margin-top:-15px; margin-bottom:20px; color:#6c757d;">인슐린 저항성의 한의학적 원인인 '습담(濕痰)'이 얼마나 쌓여있는지 확인합니다.</p>
-        <div class="checkbox-group"><input type="checkbox" id="bodyHeaviness" name="orientalSymptoms" value="bodyHeaviness"> <label for="bodyHeaviness">몸이 천근만근 무겁고 자주 붓는다</label><br><input type="checkbox" id="indigestion" name="orientalSymptoms" value="indigestion"> <label for="indigestion">소화가 잘 안 되고 속이 더부룩하다</label><br><input type="checkbox" id="phlegm" name="orientalSymptoms" value="phlegm"> <label for="phlegm">아침에 가래가 많이 낀다</label><br><input type="checkbox" id="dizziness" name="orientalSymptoms" value="dizziness"> <label for="dizziness">머리가 맑지 않고 어지러울 때가 있다</label><br><input type="checkbox" id="jointPain" name="orientalSymptoms" value="jointPain"> <label for="jointPain">비가 오거나 습한 날씨에 관절이 쑤신다</label><br></div>
-        
-        <button type="button" id="analyzeBtn" class="btn" onclick="analyzeResults()">결과 분석하기</button>
-    </form>
-    
-    <div id="results"></div>
-</div>
-
-<script>
-    // ▼▼▼▼▼ 사람이 읽기 좋은 형태로 코드를 다시 모두 정리했습니다 ▼▼▼▼▼
-    const clinicsData = {
-        "서울": {
-            "성북구": [{
-                name: "길음한의원",
-                address: "성북구 길음로 10, 2층",
-                contact: "02-943-1668",
-                website: "https://goodnewshani.my.canva.site",
-                websiteLabel: "홈페이지",
-                naverBooking: "[길음한의원 네이버 예약 링크]"
-            }]
-        }
-    };
-    
-    let currentChart = null;
-
-    document.addEventListener("DOMContentLoaded", function() {
-        const genderSelect = document.getElementById("gender");
-        const femaleOnlyElements = document.querySelectorAll(".female-only");
-
-        function toggleFemaleSpecificFields() {
-            const isFemale = genderSelect.value === 'female';
-            femaleOnlyElements.forEach(el => {
-                const checkbox = el.querySelector('input[type="checkbox"]');
-                if (checkbox) {
-                    checkbox.disabled = !isFemale;
-                    if (!isFemale) {
-                        checkbox.checked = false;
-                    }
-                }
-                el.style.opacity = isFemale ? 1 : 0.5;
-            });
-        }
-        genderSelect.addEventListener('change', toggleFemaleSpecificFields);
-        toggleFemaleSpecificFields(); // 페이지 로드 시 초기 실행
-    });
-
-    function resetTest() {
-        document.getElementById('insulinSurvey').reset();
-        document.getElementById('results').innerHTML = '';
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-    }
-
-    function analyzeResults() {
-        const ageInput = document.getElementById('age');
-        const heightInput = document.getElementById('height');
-        const weightInput = document.getElementById('weight');
-        const genderInput = document.getElementById('gender');
-
-        const age = parseInt(ageInput.value);
-        const height = parseFloat(heightInput.value);
-        const weight = parseFloat(weightInput.value);
-        const gender = genderInput.value;
-
-        if (isNaN(age) || age <= 0 || isNaN(height) || height <= 0 || isNaN(weight) || weight <= 0 || !gender) {
-            alert("나이, 키, 체중, 성별을 모두 올바르게 입력해주세요.");
-            return;
-        }
-
-        let score = 0;
-        let analysisText = "<h3>📊 검사 결과 분석</h3>";
-        
-        const heightInMeters = height / 100;
-        const bmi = weight / (heightInMeters * heightInMeters);
-        analysisText += `<p><strong>BMI:</strong> ${bmi.toFixed(2)} `;
-        if (bmi < 18.5) { analysisText += "(저체중)"; }
-        else if (bmi < 23) { analysisText += "(정상체중)"; }
-        else if (bmi < 25) { analysisText += "(과체중)"; score += 2; }
-        else if (bmi < 30) { analysisText += "(경도비만)"; score += 3; }
-        else { analysisText += "(중등도이상 비만)"; score += 4; }
-        analysisText += "</p>";
-
-        if (age >= 40 && age < 50) { score += 1; analysisText += "<p><strong>나이대:</strong> 40대 (주의 시작 구간 +1점)</p>"; }
-        else if (age >= 50) { score += 2; analysisText += "<p><strong>나이대:</strong> 50대 이상 (위험 증가 구간 +2점)</p>"; }
-
-        let riskFactorDetails = "<h4>위험 요인</h4><ul>";
-        let riskFactorCount = 0;
-        document.querySelectorAll('input[name="riskFactors"]:checked').forEach(item => {
-            riskFactorCount++;
-            let factorWeight = 1;
-            let factorText = item.nextElementSibling.textContent;
-            if (item.value === 'familyDiabetes' || item.value === 'highBloodPressure' || item.value === 'dyslipidemia' || item.value === 'highCarbDiet') {
-                factorWeight = 2; factorText += " (+2점)";
-            }
-            if (gender === 'female' && (item.value === 'gestationalDiabetes' || item.value === 'pcos')) {
-                factorWeight = 2; factorText += " (+2점)";
-            }
-            score += factorWeight;
-            riskFactorDetails += `<li>${factorText}</li>`;
-        });
-        riskFactorDetails += (riskFactorCount === 0) ? "<li>선택된 위험 요인 없음</li></ul>" : "</ul>";
-        analysisText += riskFactorDetails;
-        
-        let symptomDetails = "<h4>주요 증상</h4><ul>";
-        let symptomCount = 0;
-        document.querySelectorAll('input[name="symptoms"]:checked').forEach(item => {
-            symptomCount++;
-            let symptomWeight = 1;
-            let symptomText = item.nextElementSibling.textContent;
-            if (item.value === 'abdominalObesity' || item.value === 'sugarCravings' || item.value === 'postMealFatigue') {
-                symptomWeight = 2; symptomText += " (+2점)";
-            } else if (item.value === 'skinProblems') {
-                const skinProblemLabel = item.nextElementSibling.textContent;
-                if (skinProblemLabel.includes("흑색극세포증")) {
-                    symptomWeight = 3; symptomText = skinProblemLabel + " (+3점)";
-                } else {
-                    symptomWeight = 1; symptomText = skinProblemLabel + " (+1점)";
-                }
-            } else {
-                symptomText += " (+1점)";
-            }
-            score += symptomWeight;
-            symptomDetails += `<li>${symptomText}</li>`;
-        });
-        symptomDetails += (symptomCount === 0) ? "<li>선택된 주요 증상 없음</li></ul>" : "</ul>";
-        analysisText += symptomDetails;
-
-        let orientalSymptomDetails = "<h4>한의학적 습담(濕痰) 분석</h4><ul>";
-        let orientalSymptomCount = 0;
-        let orientalScore = 0;
-        document.querySelectorAll('input[name="orientalSymptoms"]:checked').forEach(item => {
-            orientalSymptomCount++;
-            orientalScore += 2;
-            orientalSymptomDetails += `<li>${item.nextElementSibling.textContent}</li>`;
-        });
-        score += orientalScore;
-        if (orientalSymptomCount === 0) {
-            orientalSymptomDetails += "<li>선택된 한의학적 증상 없음</li>";
-        } else if (orientalSymptomCount >= 3) {
-            orientalSymptomDetails += `<li><strong style="color:#dc3545;">한의학적 소견:</strong> 다수의 증상으로 보아 체내 노폐물인 <strong>습담(濕痰)</strong>이 많을 가능성이 높습니다. 이는 인슐린 저항성을 악화시키는 주요 원인이므로, 한의원에서 정확한 진단과 치료를 받는 것을 권장합니다.</li>`;
-        }
-        orientalSymptomDetails += "</ul>";
-        analysisText += orientalSymptomDetails;
-
-        analysisText += `<hr><p style="font-size:1.2em;"><strong>총 점수: ${score}점</strong></p>`;
-        let riskLevelText = "";
-        if (score < 5) { riskLevelText = "<span class='risk-low'>낮음</span>"; }
-        else if (score < 10) { riskLevelText = "<span class='risk-moderate'>주의</span>"; }
-        else if (score < 15) { riskLevelText = "<span class='risk-high'>높음</span>"; }
-        else { riskLevelText = "<span class='risk-high'>매우 높음</span>"; }
-        analysisText += `<p style="font-size:1.2em;"><strong>최종 위험도: ${riskLevelText}</strong></p><p>${getRiskDescription(score)}</p>`;
-        
-        const resultsDiv = document.getElementById('results');
-        resultsDiv.innerHTML = `<canvas id="resultChart" style="max-width: 100%; margin: 0 auto 25px auto; display: block;"></canvas><div id="analysisTextContainer"></div>`;
-        document.getElementById('analysisTextContainer').innerHTML = analysisText;
-        
-        drawResultChart(score);
-        initializeClinicFinder(resultsDiv);
-    }
-
-    function getRiskDescription(score) {
-        if (score < 5) return "현재 인슐린 저항성 위험이 낮아 보입니다. 건강한 생활 습관을 유지하세요.";
-        if (score < 10) return "인슐린 저항성 위험에 주의가 필요합니다. 식습관과 운동 등 생활 습관 개선을 고려해보세요.";
-        if (score < 15) return "인슐린 저항성 위험이 높은 편입니다. 생활 습관 개선과 함께 전문가와 상담을 받는 것을 적극 권장합니다.";
-        return "인슐린 저항성 위험이 매우 높습니다. 반드시 전문가와 상담하여 정확한 진단과 관리를 받으시길 바랍니다.";
-    }
-
-    function getRiskColor(score) {
-        if (score < 5) return 'rgba(40, 167, 69, 0.8)';
-        if (score < 10) return 'rgba(253, 126, 20, 0.8)';
-        return 'rgba(220, 53, 69, 0.8)';
-    }
-
-    function drawResultChart(score) {
-        if (currentChart) {
-            currentChart.destroy();
-        }
-        const ctx = document.getElementById('resultChart').getContext('2d');
-        currentChart = new Chart(ctx, {
-            type: 'bar',
-            data: {
-                labels: ['나의 위험도 점수'],
-                datasets: [{
-                    label: '점수',
-                    data: [score],
-                    backgroundColor: [getRiskColor(score)],
-                    borderColor: [getRiskColor(score)],
-                    borderWidth: 1,
-                    borderRadius: 5,
-                    barPercentage: 0.4
-                }]
-            },
-            options: {
-                indexAxis: 'y',
-                scales: {
-                    x: { beginAtZero: true, max: Math.max(25, score + 5) },
-                    y: { ticks: { font: { size: 14, weight: 'bold' } } }
-                },
-                plugins: {
-                    legend: { display: false },
-                    title: { display: true, text: '인슐린 저항성 위험도', font: { size: 18 } }
-                }
-            }
-        });
-    }
-
-    function initializeClinicFinder(resultsDiv) {
-        let recommendationsDiv = document.getElementById('clinicRecommendations');
-        if (!recommendationsDiv) {
-            recommendationsDiv = document.createElement('div');
-            recommendationsDiv.id = 'clinicRecommendations';
-            resultsDiv.appendChild(recommendationsDiv);
-        }
-        recommendationsDiv.innerHTML = `<h3>전문 한의원 상담 안내</h3><p>보다 전문적이고 자세한 내용은 설문 결과와 관계 없이, 아래 지역별 거점 한의원을 방문하여 심층적인 진료 및 상담을 받아보시는 것을 권해드립니다.</p><div id="majorRegionSelector" class="region-selector"></div><div id="subRegionSelector" class="region-selector" style="margin-top:15px; display:none;"></div><div id="clinicDisplay" style="margin-top:20px;"></div>`;
-        
-        const majorRegionSelector = document.getElementById("majorRegionSelector");
-        for (const majorRegion in clinicsData) {
-            const button = document.createElement("button");
-            button.className = "btn";
-            button.textContent = majorRegion;
-            button.onclick = () => showSubRegions(majorRegion);
-            majorRegionSelector.appendChild(button);
-        }
-
-        const actionButtonDiv = document.createElement('div');
-        actionButtonDiv.className = 'action-buttons';
-        actionButtonDiv.innerHTML = `<button type="button" class="btn btn-reset" onclick="resetTest()">다시 검사해보기</button><a href="https://goodnewshani.my.canva.site/" class="btn btn-gohome">홈페이지로 돌아가기</a>`;
-        resultsDiv.appendChild(actionButtonDiv);
-    }
-
-    function showSubRegions(majorRegion) {
-        document.querySelectorAll("#majorRegionSelector button").forEach(btn => {
-            btn.classList.toggle("active", btn.textContent === majorRegion);
-        });
-        const subRegionSelector = document.getElementById("subRegionSelector");
-        const clinicDisplay = document.getElementById("clinicDisplay");
-        subRegionSelector.innerHTML = "";
-        clinicDisplay.innerHTML = "";
-        subRegionSelector.style.display = "block";
-        const subRegions = clinicsData[majorRegion];
-        for (const subRegion in subRegions) {
-            const button = document.createElement("button");
-            button.className = "btn";
-            button.textContent = subRegion;
-            button.onclick = () => showClinicDetails(majorRegion, subRegion);
-            subRegionSelector.appendChild(button);
-        }
-    }
-
-    function showClinicDetails(majorRegion, subRegion) {
-        document.querySelectorAll("#subRegionSelector button").forEach(btn => {
-            btn.classList.toggle("active", btn.textContent === subRegion);
-        });
-        const clinicDisplay = document.getElementById("clinicDisplay");
-        clinicDisplay.innerHTML = "";
-        const clinics = clinicsData?.[majorRegion]?.[subRegion] || [];
-        clinics.forEach(clinic => {
-            const clinicWrapper = document.createElement("div");
-            clinicWrapper.className = "clinic-info-wrapper";
-            const clinicDiv = document.createElement("div");
-            clinicDiv.className = "clinic-info";
-            let clinicInfoHTML = `<h5>${clinic.name}</h5><p><strong>주소:</strong> ${clinic.address}</p><p><strong>연락처:</strong> ${clinic.contact}</p>`;
-            if (clinic.website) {
-                clinicInfoHTML += `<p><strong>${clinic.websiteLabel}:</strong> <a href="${clinic.website}" target="_blank">${clinic.website.replace(/^(https?:\/\/)?(www\.)?/, "")}</a></p>`;
-            }
-            if (clinic.naverBooking && clinic.naverBooking !== "[길음한의원 네이버 예약 링크]") {
-                clinicInfoHTML += `<a href="${clinic.naverBooking}" target="_blank" class="btn" style="background-color:#2DB400; color:white; padding:8px 12px; font-size:0.9em; margin-top:10px; display:inline-block; width:auto;">네이버 예약</a>`;
-            }
-            clinicDiv.innerHTML = clinicInfoHTML;
-            clinicWrapper.appendChild(clinicDiv);
-            clinicDisplay.appendChild(clinicWrapper);
-        });
-    }
-</script>
-
-</body>
-</html>
+        <img src="data:image/jpeg;base64,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
